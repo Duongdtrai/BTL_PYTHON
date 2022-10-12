@@ -366,3 +366,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# phát triển chức năng đa luồng: 2 player
+# Phạm Tùng Dương

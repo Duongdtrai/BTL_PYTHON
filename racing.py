@@ -186,75 +186,74 @@ def isGameOver(car, obstacles):
             return True
     return False
 
+option = 0
+def chooseOpitons():
+    global option
+    print(option)
+    option1 = button.Button(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 80, PLAY_BUTTON)
+    option2 = button.Button(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, PLAY_BUTTON)
+    option1.draw(DISPLAY_SURF)
+    option2.draw(DISPLAY_SURF)
+
+    if option1.isClicked:
+        option = 1
+
+    if option2.isClicked:
+        option = 2
+
+
 idx = 0
-carPlayer = carListUser[0] # Biến chọn xe người chơi
-def gameStart(bg):
-    global carPlayer
+carPlayer1 = carListUserStart[0] # Biến chọn xe người chơi
+def chooseCar1(bg):
     global idx
-    # idx = 0
-    playButton1 = button.Button(WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT - 380, PLAY_BUTTON)
+    DISPLAY_SURF.blit(bg, (0, 0))
+    playButton = button.Button(WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT - 250, PLAY_BUTTON)
+    leftButton = button.Button(0, 280, LEFT_BUTTON)
+    rightButton = button.Button(340, 280, RIGHT_BUTTON)
+    DISPLAY_SURF.blit(FRAMES, (55, 210))
+    DISPLAY_SURF.blit(carListUser[idx], (100, 200))
+    playButton.draw(DISPLAY_SURF) 
+    leftButton.draw(DISPLAY_SURF)
+    rightButton.draw(DISPLAY_SURF)
+
+    if leftButton.isClicked:
+        time.sleep(0.3)
+        if idx == 0:
+            idx = len(carListUser) - 1
+        else:
+            idx -= 1
+
+    if rightButton.isClicked:
+        time.sleep(0.3)
+        if idx == len(carListUser) - 1:
+            idx = 0
+        else:
+            idx += 1
+    
+    if playButton.isClicked:
+        return carListUserStart[idx] # chọn xe người chơi
+
+carPlayer2 = carListUserStart[0]
+def chooseCar2(bg):
+    global carPlayer1
+    global carPlayer2
+    carPlayer1 = chooseCar1(bg)
+    carPlayer2 = chooseCar1(bg)
+
+
+def gameStart(bg):
+    playButton = button.Button(WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT - 380, PLAY_BUTTON)
     helpButton = button.Button(WINDOW_WIDTH - 60, 0, HELP_BUTTON)
-    chooseCarButton = button.Button(310, 10, CHOOSE_CAR)
     returnButton = button.Button(20, 160, RETURN_BUTTON)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
-        # leftButton = button.Button(100, 100, LEFT_BUTTON)
-        # rightButton = button.Button(200, 100, RIGHT_BUTTON)
         
         DISPLAY_SURF.blit(bg, (0, 0))
-        # DISPLAY_SURF.blit(carListUser[idx], (100, 100))
-        # DISPLAY_SURF.blit(FRAMES, (50, 200))
-        chooseCarButton.draw(DISPLAY_SURF)
-        # leftButton.draw(DISPLAY_SURF)
-        # rightButton.draw(DISPLAY_SURF)
-        playButton1.draw(DISPLAY_SURF)
+        playButton.draw(DISPLAY_SURF)
         helpButton.draw(DISPLAY_SURF)
-
-        # if leftButton.isClicked:
-        #     time.sleep(0.3)
-        #     if idx == 0:
-        #         idx = len(carListUser) - 1
-        #     else:
-        #         idx -= 1
-
-        # if rightButton.isClicked:
-        #     time.sleep(0.3)
-        #     if idx == len(carListUser) - 1:
-        #         idx = 0
-        #     else:
-        #         idx += 1
-
-        if chooseCarButton.isClicked:
-            playButton2 = button.Button(WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT - 250, PLAY_BUTTON)
-            leftButton = button.Button(0, 280, LEFT_BUTTON)
-            rightButton = button.Button(340, 280, RIGHT_BUTTON)
-            DISPLAY_SURF.blit(FRAMES, (55, 210))
-            DISPLAY_SURF.blit(carListUser[idx], (100, 200))
-            playButton2.draw(DISPLAY_SURF) #####
-            leftButton.draw(DISPLAY_SURF)
-            rightButton.draw(DISPLAY_SURF)
-
-            if leftButton.isClicked:
-                time.sleep(0.3)
-                if idx == 0:
-                    idx = len(carListUser) - 1
-                else:
-                    idx -= 1
-
-            if rightButton.isClicked:
-                time.sleep(0.3)
-                if idx == len(carListUser) - 1:
-                    idx = 0
-                else:
-                    idx += 1
-            ### 
-            if playButton2.isClicked:
-                carPlayer = carListUserStart[idx] # chọn xe người chơi
-                return
 
         if helpButton.isClicked:
             DISPLAY_SURF.blit(INSTRUCTION, (-94, 40))
@@ -262,9 +261,13 @@ def gameStart(bg):
             if returnButton.isClicked:
                 gameStart(bg)
 
-        if playButton1.isClicked:
-            carPlayer = carListUserStart[idx] # chọn xe người chơi
-            return
+        if playButton.isClicked:
+            DISPLAY_SURF.blit(bg, (0, 0))
+            chooseOpitons()
+            if option == 1:
+                chooseCar1(bg)
+            if option == 2:
+                chooseCar2(bg)
 
         pygame.display.update()
         fpsClock.tick(FPS)
@@ -272,7 +275,7 @@ def gameStart(bg):
 
 def gamePlay(bg, car, obstacles, score):
     global BG_IMG
-    car.__init__(carPlayer)
+    car.__init__(carPlayer1)
     obstacles.__init__()
     bg.__init__(BG_IMG)
     score.__init__()
@@ -357,7 +360,7 @@ def gameOver(bg, car, obstacles, score):
 def main():
     gameStart(BG_POSTER)
     bg = Background(BG_IMG)
-    car = Car(carPlayer)
+    car = Car(carPlayer1)
     obstacles = Obstacles()
     score = Score()
     while True:
@@ -370,5 +373,3 @@ if __name__ == '__main__':
 
 # phát triển chức năng đa luồng: 2 player
 # Phạm Tùng Dương
-# Dam ha
-# Dam ha 2

@@ -25,7 +25,7 @@ def PLAY_BUTTON():
 
 def HELP_BUTTON():
     HELP_BUTTON = pygame.image.load('./img/help/sos_help.png')
-    HELP_BUTTON = pygame.transform.scale(HELP_BUTTON, (80, 80))
+    HELP_BUTTON = pygame.transform.scale(HELP_BUTTON, (40, 60))
     return HELP_BUTTON
 
 

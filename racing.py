@@ -1,5 +1,6 @@
 # import thư viện
 from glob import glob
+import threading
 import pygame
 import sys
 import random
@@ -322,7 +323,6 @@ def gameStart(bg):
                     time.sleep(0.3)
                 if choosedCar1 == True:
                     carPlayer2 = chooseCar2(bg)
-                    print(choosedCar2)
                 
         if choosedCar1 == True and option == 1:
             return
@@ -333,46 +333,103 @@ def gameStart(bg):
         pygame.display.update()
         fpsClock.tick(FPS)
 
+lock = threading.Lock()
+def P1Movement(events):
+    global P1moveLeft, P1moveRight, P1moveUp, P1moveDown
+    global lock
 
-def gamePlay(bg, car, obstacles, score):
+    lock.acquire()
+
+    for event in events:
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        if event.type == KEYDOWN:
+            if event.key == K_LEFT:
+                P1moveLeft = True
+            if event.key == K_RIGHT:
+                P1moveRight = True
+            if event.key == K_UP:
+                P1moveUp = True
+            if event.key == K_DOWN:
+                P1moveDown = True
+        if event.type == KEYUP:
+            if event.key == K_LEFT:
+                P1moveLeft = False
+            if event.key == K_RIGHT:
+                P1moveRight = False
+            if event.key == K_UP:
+                P1moveUp = False
+            if event.key == K_DOWN:
+                P1moveDown = False
+    lock.release()
+
+
+def P2Movement(events):
+    global P2moveLeft, P2moveRight, P2moveUp, P2moveDown
+    global lock
+
+    lock.acquire()
+
+    for event in events:
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        if event.type == KEYDOWN:
+            if event.key == K_a:
+                P2moveLeft = True
+            if event.key == K_d:
+                P2moveRight = True
+            if event.key == K_w:
+                P2moveUp = True
+            if event.key == K_s:
+                P2moveDown = True
+        if event.type == KEYUP:
+            if event.key == K_a:
+                P2moveLeft = False
+            if event.key == K_d:
+                P2moveRight = False
+            if event.key == K_w:
+                P2moveUp = False
+            if event.key == K_s:
+                P2moveDown = False
+    lock.release()
+
+
+P1moveLeft = P1moveRight = P1moveUp = P1moveDown = False
+P2moveLeft = P2moveRight = P2moveUp = P2moveDown = False
+def gamePlay(bg, car1, car2, obstacles, score):
+    global P1moveLeft, P1moveRight, P1moveUp, P1moveDown
+    global P2moveLeft, P2moveRight, P2moveUp, P2moveDown
     global BG_IMG
-    car.__init__(carPlayer1)
+
+    car1.__init__(carPlayer1)
+    car2.__init__(carPlayer2)
     obstacles.__init__()
     bg.__init__(BG_IMG)
     score.__init__()
-    moveLeft = False
-    moveRight = False
-    moveUp = False
-    moveDown = False
+
+    P1moveLeft = P1moveRight = P1moveUp = P1moveDown = False
+    P2moveLeft = P2moveRight = P2moveUp = P2moveDown = False
+
     while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_LEFT:
-                    moveLeft = True
-                if event.key == K_RIGHT:
-                    moveRight = True
-                if event.key == K_UP:
-                    moveUp = True
-                if event.key == K_DOWN:
-                    moveDown = True
-            if event.type == KEYUP:
-                if event.key == K_LEFT:
-                    moveLeft = False
-                if event.key == K_RIGHT:
-                    moveRight = False
-                if event.key == K_UP:
-                    moveUp = False
-                if event.key == K_DOWN:
-                    moveDown = False
-        if isGameOver(car, obstacles):
+        events = pygame.event.get()
+        P1_thread = threading.Thread(target=P1Movement, args=(events,))
+        P2_thread = threading.Thread(target=P2Movement, args=(events,))
+        P1_thread.start()
+        P2_thread.start()
+        P1_thread.join()
+        P2_thread.join()
+
+        if isGameOver(car1, obstacles) or isGameOver(car2, obstacles):
             return
+
         bg.draw()
         bg.update()
-        car.draw()
-        car.update(moveLeft, moveRight, moveUp, moveDown)
+        car1.draw()
+        car1.update(P1moveLeft, P1moveRight, P1moveUp, P1moveDown)
+        car2.draw()
+        car2.update(P2moveLeft, P2moveRight, P2moveUp, P2moveDown)        
         obstacles.draw()
         obstacles.update()
         score.draw()
@@ -426,12 +483,8 @@ def main():
     obstacles = Obstacles()
     score = Score()
     while True:
-        gamePlay(bg, car1, obstacles, score)
+        gamePlay(bg, car1, car2, obstacles, score)
         gameOver(bg, car1, obstacles, score)
 
 if __name__ == '__main__':
     main()
-
-
-# phát triển chức năng đa luồng: 2 player
-# Phạm Tùng Dương

@@ -291,9 +291,11 @@ def gameStart(bg):
     global sleep
     global carPlayer1
     global carPlayer2
+
     playButton = button.Button(WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT - 380, PLAY_BUTTON)
     helpButton = button.Button(WINDOW_WIDTH - 40, 0, HELP_BUTTON)
     returnButton = button.Button(20, 160, RETURN_BUTTON)
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -311,8 +313,8 @@ def gameStart(bg):
                 gameStart(bg)
 
         if playButton.isClicked:
-            DISPLAY_SURF.blit(bg, (0, 0))
             time.sleep(0.1)
+            DISPLAY_SURF.blit(bg, (0, 0))
             chooseOpitons()
             print(option)
             if option == 1:
@@ -437,12 +439,12 @@ def gamePlay2P(bg, car1, car2, obstacles, score):
         score.draw()
         score.update()
 
-        scoreUser = int(score.getScore())
-        scoreNextLevel = random.randint(5, 10)
-        if scoreUser == scoreNextLevel:
-            # print(diem)
-            BG_IMG = BG_POSTER
-            bg.__init__(BG_IMG)
+        # scoreUser = int(score.getScore())
+        # scoreNextLevel = random.randint(5, 10)
+        # if scoreUser == scoreNextLevel:
+        #     # print(diem)
+        #     BG_IMG = BG_POSTER
+        #     bg.__init__(BG_IMG)
         pygame.display.update()
         fpsClock.tick(FPS)
 
@@ -488,6 +490,9 @@ def gamePlay1P(bg, car, obstacles, score):
 
 def gameOver(bg, car, obstacles, score):
     global option
+    global choosedCar1
+    global choosedCar2
+
     reloadButton = button.Button(WINDOW_WIDTH/2 - 50, WINDOW_HEIGHT/2 - 30, RELOAD_BUTTON)
     backButton = button.Button(WINDOW_WIDTH/2 + 50, WINDOW_HEIGHT/2 - 30, RELOAD_BUTTON) 
 
@@ -515,6 +520,8 @@ def gameOver(bg, car, obstacles, score):
 
         if backButton.isClicked:
             option = 0
+            choosedCar1 = False
+            choosedCar2 = False
             gameStart(BG_POSTER)
             return
 

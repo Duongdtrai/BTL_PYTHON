@@ -312,7 +312,9 @@ def gameStart(bg):
 
         if playButton.isClicked:
             DISPLAY_SURF.blit(bg, (0, 0))
+            time.sleep(0.1)
             chooseOpitons()
+            print(option)
             if option == 1:
                 carPlayer1 = chooseCar1(bg)
             if option == 2:
@@ -398,7 +400,7 @@ def P2Movement(events):
 
 P1moveLeft = P1moveRight = P1moveUp = P1moveDown = False
 P2moveLeft = P2moveRight = P2moveUp = P2moveDown = False
-def gamePlay(bg, car1, car2, obstacles, score):
+def gamePlay2P(bg, car1, car2, obstacles, score):
     global P1moveLeft, P1moveRight, P1moveUp, P1moveDown
     global P2moveLeft, P2moveRight, P2moveUp, P2moveDown
     global BG_IMG
@@ -445,9 +447,50 @@ def gamePlay(bg, car1, car2, obstacles, score):
         fpsClock.tick(FPS)
 
 
+def gamePlay1P(bg, car, obstacles, score):
+    global P1moveLeft, P1moveRight, P1moveUp, P1moveDown
+    global BG_IMG
+
+    car.__init__(carPlayer1)
+    obstacles.__init__()
+    bg.__init__(BG_IMG)
+    score.__init__()
+
+    P1moveLeft = P1moveRight = P1moveUp = P1moveDown = False
+
+    while True:
+        events = pygame.event.get()
+        P1_thread = threading.Thread(target=P1Movement, args=(events,))
+        P1_thread.start()
+        P1_thread.join()
+
+        if isGameOver(car, obstacles):
+            return
+
+        bg.draw()
+        bg.update()
+        car.draw()
+        car.update(P1moveLeft, P1moveRight, P1moveUp, P1moveDown)
+        obstacles.draw()
+        obstacles.update()
+        score.draw()
+        score.update()
+
+        # scoreUser = int(score.getScore())
+        # scoreNextLevel = random.randint(5, 10)
+        # if scoreUser == scoreNextLevel:
+        #     # print(diem)
+        #     BG_IMG = BG_POSTER
+        #     bg.__init__(BG_IMG)
+        pygame.display.update()
+        fpsClock.tick(FPS)
+
+
 def gameOver(bg, car, obstacles, score):
-    reloadButton = button.Button(
-        WINDOW_WIDTH/2 - 50, WINDOW_HEIGHT/2 - 30, RELOAD_BUTTON)
+    global option
+    reloadButton = button.Button(WINDOW_WIDTH/2 - 50, WINDOW_HEIGHT/2 - 30, RELOAD_BUTTON)
+    backButton = button.Button(WINDOW_WIDTH/2 + 50, WINDOW_HEIGHT/2 - 30, RELOAD_BUTTON) 
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -459,6 +502,7 @@ def gameOver(bg, car, obstacles, score):
         obstacles.draw()
         score.draw()
         reloadButton.draw(DISPLAY_SURF)
+        backButton.draw(DISPLAY_SURF) 
         DISPLAY_SURF.blit(IMAGE.GAME_OVER(), (35, 150))
 
         for event in pygame.event.get():
@@ -466,15 +510,19 @@ def gameOver(bg, car, obstacles, score):
                 if event.key == K_SPACE:     
                     return   
 
-        # goi lai gameStart neu muon chon lai xe
         if reloadButton.isClicked:
-            # gameStart(BG_POSTER)
+            return
+
+        if backButton.isClicked:
+            option = 0
+            gameStart(BG_POSTER)
             return
 
         pygame.display.update()
         fpsClock.tick(FPS)
 
-
+# BG2 = pygame.image.load('D:/bg2.png')
+# BG2 = pygame.transform.scale(BG2, (400, 700))
 def main():
     gameStart(BG_POSTER)
     bg = Background(BG_IMG)
@@ -483,7 +531,10 @@ def main():
     obstacles = Obstacles()
     score = Score()
     while True:
-        gamePlay(bg, car1, car2, obstacles, score)
+        if option == 1:
+            gamePlay1P(bg, car1, obstacles, score)
+        elif option == 2:
+            gamePlay2P(bg, car1, car2, obstacles, score)
         gameOver(bg, car1, obstacles, score)
 
 if __name__ == '__main__':

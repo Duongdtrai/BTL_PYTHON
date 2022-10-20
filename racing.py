@@ -316,7 +316,7 @@ def gameStart(bg):
                 gameStart(bg)
 
         if playButton.isClicked:
-            time.sleep(0.1)
+            time.sleep(0.2)
             DISPLAY_SURF.blit(bg, (0, 0))
             chooseOpitons()
             # print(option)

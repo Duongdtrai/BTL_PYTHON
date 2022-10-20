@@ -10,6 +10,16 @@ def BACKGROUND():
     BGIMG = pygame.transform.scale(BGIMG, (400, 700))
     return BGIMG    
 
+def ONE_PLAYER():
+    ONE_PLAYER = pygame.image.load('./img/button/1player.png')
+    ONE_PLAYER = pygame.transform.scale(ONE_PLAYER, (140, 140))
+    return ONE_PLAYER
+
+
+def TWO_PLAYER():
+    TWO_PLAYER = pygame.image.load('./img/button/2player.png')
+    TWO_PLAYER = pygame.transform.scale(TWO_PLAYER, (140, 140))
+    return TWO_PLAYER
 #Background trước khi vào game
 def POSTER():
     BGIMG = pygame.image.load('./img/background/background.jpg')
@@ -19,7 +29,7 @@ def POSTER():
 
 def PLAY_BUTTON():
     PLAY_BUTTON = pygame.image.load('./img/button/play.png')
-    PLAY_BUTTON = pygame.transform.scale(PLAY_BUTTON, (200, 100))
+    PLAY_BUTTON = pygame.transform.scale(PLAY_BUTTON, (180, 90))
     return PLAY_BUTTON
 
 
@@ -40,6 +50,10 @@ def RELOAD_BUTTON():
     RELOAD_BUTTON = pygame.transform.scale(RELOAD_BUTTON, (100, 100))
     return RELOAD_BUTTON
 
+def BACK_BUTTON():
+    BACK_BUTTON = pygame.image.load('./img/button/back.png')
+    BACK_BUTTON = pygame.transform.scale(BACK_BUTTON, (100, 100))
+    return BACK_BUTTON
 
 def INSTRUCTION():
     INSTRUCTION = pygame.image.load('./img/help/instruction.png')
@@ -61,7 +75,7 @@ def RIGHT_BUTTON():
 
 def FRAMES():
     FRAMES = pygame.image.load('./img/khung.png')
-    FRAMES = pygame.transform.scale(FRAMES, (300, 250))
+    FRAMES = pygame.transform.scale(FRAMES, (250, 300))
     return FRAMES
 
 

@@ -51,11 +51,14 @@ PLAY_BUTTON = IMAGE.PLAY_BUTTON()
 HELP_BUTTON = IMAGE.HELP_BUTTON()
 RETURN_BUTTON = IMAGE.RETURN_BUTTON()
 RELOAD_BUTTON = IMAGE.RELOAD_BUTTON()
+BACK_BUTTON= IMAGE.BACK_BUTTON()
 INSTRUCTION = IMAGE.INSTRUCTION()
 LEFT_BUTTON = IMAGE.LEFT_BUTTON()
 RIGHT_BUTTON = IMAGE.RIGHT_BUTTON()
 FRAMES = IMAGE.FRAMES()  # khung chứa chọn các xe
 CHOOSE_CAR = IMAGE.CHOOSE_CAR()
+ONE_PLAYER = IMAGE.ONE_PLAYER()  # khung chứa chọn các xe
+TWO_PLAYER = IMAGE.TWO_PLAYER()
 # init app game
 pygame.init()
 DISPLAY_SURF = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -193,8 +196,8 @@ choosedCar1 = False
 choosedCar2 = False
 def chooseOpitons():
     global option
-    option1 = button.Button(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2 - 200, PLAY_BUTTON)
-    option2 = button.Button(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2 - 100, PLAY_BUTTON)
+    option1 = button.Button(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2 - 150, ONE_PLAYER)
+    option2 = button.Button(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2 - 50, TWO_PLAYER)
     option1.draw(DISPLAY_SURF)
     option2.draw(DISPLAY_SURF)
 
@@ -220,8 +223,8 @@ def chooseCar1(bg):
             pygame.quit()
 
     DISPLAY_SURF.blit(bg, (0, 0))
-    DISPLAY_SURF.blit(FRAMES, (55, 210))
-    DISPLAY_SURF.blit(carListUser[idx1], (100, 200))
+    DISPLAY_SURF.blit(FRAMES, (80, 150))
+    DISPLAY_SURF.blit(carListUser[idx1], (170, 260))
     playButton.draw(DISPLAY_SURF) 
     leftButton.draw(DISPLAY_SURF)
     rightButton.draw(DISPLAY_SURF)
@@ -316,7 +319,7 @@ def gameStart(bg):
             time.sleep(0.1)
             DISPLAY_SURF.blit(bg, (0, 0))
             chooseOpitons()
-            print(option)
+            # print(option)
             if option == 1:
                 carPlayer1 = chooseCar1(bg)
             if option == 2:
@@ -493,8 +496,8 @@ def gameOver(bg, car, obstacles, score):
     global choosedCar1
     global choosedCar2
 
-    reloadButton = button.Button(WINDOW_WIDTH/2 - 50, WINDOW_HEIGHT/2 - 30, RELOAD_BUTTON)
-    backButton = button.Button(WINDOW_WIDTH/2 + 50, WINDOW_HEIGHT/2 - 30, RELOAD_BUTTON) 
+    reloadButton = button.Button(WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT/2 - 30, RELOAD_BUTTON)
+    backButton = button.Button(WINDOW_WIDTH/2 + 5, WINDOW_HEIGHT/2 - 30, BACK_BUTTON) 
 
     while True:
         for event in pygame.event.get():

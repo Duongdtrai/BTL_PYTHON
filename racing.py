@@ -194,10 +194,13 @@ def isGameOver(car, obstacles):
 option = 0
 choosedCar1 = False
 choosedCar2 = False
-def chooseOpitons():
+def chooseOpitons(bg):
     global option
-    option1 = button.Button(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2 - 150, ONE_PLAYER)
-    option2 = button.Button(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2 - 50, TWO_PLAYER)
+
+    DISPLAY_SURF.blit(bg, (0, 0))
+
+    option1 = button.Button(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2 - 250, ONE_PLAYER)
+    option2 = button.Button(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2 - 100, TWO_PLAYER)
     option1.draw(DISPLAY_SURF)
     option2.draw(DISPLAY_SURF)
 
@@ -289,13 +292,19 @@ def chooseCar2(bg):
         car = carListUserStart[idx2]
     return car
 
+playing = False
 sleep = False
 def gameStart(bg):
     global sleep
+    global playing
     global carPlayer1
     global carPlayer2
 
-    playButton = button.Button(WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT - 380, PLAY_BUTTON)
+    font = pygame.font.SysFont('consolas', 30)
+    commentSuface = font.render('Press "space" to play', True, (0, 0, 0))
+    commentSize = commentSuface.get_size()
+
+    # playButton = button.Button(WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT - 450, PLAY_BUTTON)
     helpButton = button.Button(WINDOW_WIDTH - 40, 0, HELP_BUTTON)
     returnButton = button.Button(20, 160, RETURN_BUTTON)
 
@@ -306,8 +315,9 @@ def gameStart(bg):
                 sys.exit()
         
         DISPLAY_SURF.blit(bg, (0, 0))
-        playButton.draw(DISPLAY_SURF)
+        # playButton.draw(DISPLAY_SURF)
         helpButton.draw(DISPLAY_SURF)
+        DISPLAY_SURF.blit(commentSuface, (int((WINDOW_WIDTH - commentSize[0])/2), 300))
 
         if helpButton.isClicked:
             DISPLAY_SURF.blit(INSTRUCTION, (-94, 40))
@@ -315,11 +325,12 @@ def gameStart(bg):
             if returnButton.isClicked:
                 gameStart(bg)
 
-        if playButton.isClicked:
-            time.sleep(0.2)
-            DISPLAY_SURF.blit(bg, (0, 0))
-            chooseOpitons()
-            # print(option)
+        if event.type == pygame.KEYUP:
+            if event.key == K_SPACE:   
+                playing = True
+        
+        if playing:
+            chooseOpitons(bg)
             if option == 1:
                 carPlayer1 = chooseCar1(bg)
             if option == 2:
@@ -492,6 +503,7 @@ def gamePlay1P(bg, car, obstacles, score):
 
 
 def gameOver(bg, car, obstacles, score):
+    global chooseSleep
     global option
     global choosedCar1
     global choosedCar2
@@ -523,6 +535,7 @@ def gameOver(bg, car, obstacles, score):
 
         if backButton.isClicked:
             option = 0
+            chooseSleep = False
             choosedCar1 = False
             choosedCar2 = False
             gameStart(BG_POSTER)

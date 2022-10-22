@@ -49,6 +49,7 @@ BG_POSTER = IMAGE.POSTER() # Background trước ghi vào game
 BG_IMG = IMAGE.BACKGROUND()
 PLAY_BUTTON = IMAGE.PLAY_BUTTON()
 HELP_BUTTON = IMAGE.HELP_BUTTON()
+SOUND_BUTTON = IMAGE.SOUND_BUTTON()
 RETURN_BUTTON = IMAGE.RETURN_BUTTON()
 RELOAD_BUTTON = IMAGE.RELOAD_BUTTON()
 BACK_BUTTON= IMAGE.BACK_BUTTON()
@@ -199,8 +200,8 @@ def chooseOpitons(bg):
 
     DISPLAY_SURF.blit(bg, (0, 0))
 
-    option1 = button.Button(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2 - 250, ONE_PLAYER)
-    option2 = button.Button(WINDOW_WIDTH / 2 - 100, WINDOW_HEIGHT / 2 - 100, TWO_PLAYER)
+    option1 = button.Button(WINDOW_WIDTH / 2 - 90, WINDOW_HEIGHT / 2 - 150, ONE_PLAYER)
+    option2 = button.Button(WINDOW_WIDTH / 2 - 60, WINDOW_HEIGHT / 2 - 0, TWO_PLAYER)
     option1.draw(DISPLAY_SURF)
     option2.draw(DISPLAY_SURF)
 
@@ -217,9 +218,9 @@ def chooseCar1(bg):
     global choosedCar1
     
     car = carListUserStart[idx1]
-    playButton = button.Button(WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT - 250, PLAY_BUTTON)
-    leftButton = button.Button(0, 280, LEFT_BUTTON)
-    rightButton = button.Button(340, 280, RIGHT_BUTTON)
+    playButton = button.Button(WINDOW_WIDTH/2 - 90, WINDOW_HEIGHT - 250, PLAY_BUTTON)
+    leftButton = button.Button(40, 280, LEFT_BUTTON)
+    rightButton = button.Button(300, 280, RIGHT_BUTTON)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -258,17 +259,17 @@ def chooseCar2(bg):
     global choosedCar2
     
     car = carListUserStart[idx2]
-    playButton = button.Button(WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT - 250, PLAY_BUTTON)
-    leftButton = button.Button(0, 280, LEFT_BUTTON)
-    rightButton = button.Button(340, 280, RIGHT_BUTTON)
+    playButton = button.Button(WINDOW_WIDTH/2 - 90, WINDOW_HEIGHT - 250, PLAY_BUTTON)
+    leftButton = button.Button(40, 280, LEFT_BUTTON)
+    rightButton = button.Button(300, 280, RIGHT_BUTTON)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
 
     DISPLAY_SURF.blit(bg, (0, 0))
-    DISPLAY_SURF.blit(FRAMES, (55, 210))
-    DISPLAY_SURF.blit(carListUser[idx2], (100, 200))
+    DISPLAY_SURF.blit(FRAMES, (80, 150))
+    DISPLAY_SURF.blit(carListUser[idx1], (170, 260))
     playButton.draw(DISPLAY_SURF) 
     leftButton.draw(DISPLAY_SURF)
     rightButton.draw(DISPLAY_SURF)
@@ -305,7 +306,9 @@ def gameStart(bg):
     commentSize = commentSuface.get_size()
 
     # playButton = button.Button(WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT - 450, PLAY_BUTTON)
-    helpButton = button.Button(WINDOW_WIDTH - 40, 0, HELP_BUTTON)
+    helpButton = button.Button(WINDOW_WIDTH - 60, 0, HELP_BUTTON)
+    soundButton = button.Button(WINDOW_WIDTH - 110, 3, SOUND_BUTTON)
+
     returnButton = button.Button(20, 160, RETURN_BUTTON)
 
     while True:
@@ -315,8 +318,9 @@ def gameStart(bg):
                 sys.exit()
         
         DISPLAY_SURF.blit(bg, (0, 0))
-        # playButton.draw(DISPLAY_SURF)
+      
         helpButton.draw(DISPLAY_SURF)
+        soundButton.draw(DISPLAY_SURF)
         DISPLAY_SURF.blit(commentSuface, (int((WINDOW_WIDTH - commentSize[0])/2), 300))
 
         if helpButton.isClicked:

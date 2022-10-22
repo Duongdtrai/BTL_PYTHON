@@ -12,13 +12,13 @@ def BACKGROUND():
 
 def ONE_PLAYER():
     ONE_PLAYER = pygame.image.load('./img/button/1player.png')
-    ONE_PLAYER = pygame.transform.scale(ONE_PLAYER, (140, 140))
+    ONE_PLAYER = pygame.transform.scale(ONE_PLAYER, (150, 145))
     return ONE_PLAYER
 
 
 def TWO_PLAYER():
     TWO_PLAYER = pygame.image.load('./img/button/2player.png')
-    TWO_PLAYER = pygame.transform.scale(TWO_PLAYER, (140, 140))
+    TWO_PLAYER = pygame.transform.scale(TWO_PLAYER, (120, 65))
     return TWO_PLAYER
 #Background trước khi vào game
 def POSTER():
@@ -32,11 +32,15 @@ def PLAY_BUTTON():
     PLAY_BUTTON = pygame.transform.scale(PLAY_BUTTON, (180, 90))
     return PLAY_BUTTON
 
-
 def HELP_BUTTON():
-    HELP_BUTTON = pygame.image.load('./img/help/sos_help.png')
-    HELP_BUTTON = pygame.transform.scale(HELP_BUTTON, (40, 60))
+    HELP_BUTTON = pygame.image.load('./img/help/information.png')
+    HELP_BUTTON = pygame.transform.scale(HELP_BUTTON, (60, 60))
     return HELP_BUTTON
+
+def SOUND_BUTTON():
+    SOUND_BUTTON = pygame.image.load('./img/help/sound.png')
+    SOUND_BUTTON = pygame.transform.scale(SOUND_BUTTON, (60, 60))
+    return SOUND_BUTTON
 
 
 def RETURN_BUTTON():

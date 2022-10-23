@@ -269,7 +269,7 @@ def chooseCar2(bg):
 
     DISPLAY_SURF.blit(bg, (0, 0))
     DISPLAY_SURF.blit(FRAMES, (80, 150))
-    DISPLAY_SURF.blit(carListUser[idx1], (170, 260))
+    DISPLAY_SURF.blit(carListUser[idx2], (170, 260))
     playButton.draw(DISPLAY_SURF) 
     leftButton.draw(DISPLAY_SURF)
     rightButton.draw(DISPLAY_SURF)
@@ -316,6 +316,10 @@ def gameStart(bg):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
+            if event.type == pygame.KEYUP:
+                if event.key == K_SPACE:   
+                    playing = True
         
         DISPLAY_SURF.blit(bg, (0, 0))
       
@@ -329,10 +333,6 @@ def gameStart(bg):
             if returnButton.isClicked:
                 gameStart(bg)
 
-        if event.type == pygame.KEYUP:
-            if event.key == K_SPACE:   
-                playing = True
-        
         if playing:
             chooseOpitons(bg)
             if option == 1:
@@ -343,7 +343,7 @@ def gameStart(bg):
                 if choosedCar1 == True and sleep == False:
                     sleep = True
                     time.sleep(0.3)
-                if choosedCar1 == True:
+                if choosedCar1 == True and sleep == True:
                     carPlayer2 = chooseCar2(bg)
                 
         if choosedCar1 == True and option == 1:
@@ -420,6 +420,7 @@ def P2Movement(events):
 
 P1moveLeft = P1moveRight = P1moveUp = P1moveDown = False
 P2moveLeft = P2moveRight = P2moveUp = P2moveDown = False
+
 def gamePlay2P(bg, car1, car2, obstacles, score):
     global P1moveLeft, P1moveRight, P1moveUp, P1moveDown
     global P2moveLeft, P2moveRight, P2moveUp, P2moveDown
@@ -507,8 +508,8 @@ def gamePlay1P(bg, car, obstacles, score):
 
 
 def gameOver(bg, car, obstacles, score):
-    global chooseSleep
     global option
+    global sleep
     global choosedCar1
     global choosedCar2
 
@@ -529,17 +530,17 @@ def gameOver(bg, car, obstacles, score):
         backButton.draw(DISPLAY_SURF) 
         DISPLAY_SURF.blit(IMAGE.GAME_OVER(), (35, 150))
 
-        for event in pygame.event.get():
-            if event.type == pygame.KEYUP:
-                if event.key == K_SPACE:     
-                    return   
+        # for event in pygame.event.get():
+        #     if event.type == pygame.KEYUP:
+        #         if event.key == K_SPACE:     
+        #             return   
 
         if reloadButton.isClicked:
             return
 
         if backButton.isClicked:
             option = 0
-            chooseSleep = False
+            sleep = False
             choosedCar1 = False
             choosedCar2 = False
             gameStart(BG_POSTER)

@@ -107,8 +107,8 @@ class Obstacles():
             #         LANE_WIDTH + (LANE_WIDTH-self.width)/2)
             x = int(self.ls[i][0])
             y = int(self.ls[i][1])
-            rect = [x, y, self.ls[i][3], self.ls[i][4]]
-            pygame.draw.rect(DISPLAY_SURF, (255,0,0), rect, 2)
+            # rect = [x, y, self.ls[i][3], self.ls[i][4]]
+            # pygame.draw.rect(DISPLAY_SURF, (255,0,0), rect, 2)
             DISPLAY_SURF.blit(self.ls[i][2], (x, y))
 
     def update(self):

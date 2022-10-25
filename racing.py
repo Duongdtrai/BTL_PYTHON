@@ -87,17 +87,19 @@ class Background():
 
 class Obstacles():
     def __init__(self):
-        self.width = CAR_WIDTH
-        self.height = CAR_HEIGHT
+        # self.width = CAR_WIDTH
+        # self.height = CAR_HEIGHT
         self.distance = DISTANCE
         self.speed = OBSTACLES_SPEED
         self.changeSpeed = CHANGE_SPEED
         self.ls = []
         for i in range(5):
-            y = -CAR_HEIGHT-i*self.distance
+            carObstacleImg = carListObstacle[random.randint(0, len(carListObstacle) - 1)]
+            obstacle_width = carObstacleImg.get_width()
+            obstacle_height = carObstacleImg.get_height()
+            y = - obstacle_height - i * self.distance
             lane = random.randint(55, 300)
-            carObstacleImg = carListObstacle[random.randint(0, len(carListObstacle) - 1)] # random xe
-            self.ls.append([lane, y, carObstacleImg]) # thêm ảnh xe vào mảng
+            self.ls.append([lane, y, carObstacleImg, obstacle_width, obstacle_height]) 
 
     def draw(self):
         for i in range(5):
@@ -105,6 +107,8 @@ class Obstacles():
             #         LANE_WIDTH + (LANE_WIDTH-self.width)/2)
             x = int(self.ls[i][0])
             y = int(self.ls[i][1])
+            rect = [x, y, self.ls[i][3], self.ls[i][4]]
+            pygame.draw.rect(DISPLAY_SURF, (255,0,0), rect, 2)
             DISPLAY_SURF.blit(self.ls[i][2], (x, y))
 
     def update(self):
@@ -113,17 +117,19 @@ class Obstacles():
         self.speed += self.changeSpeed
         if self.ls[0][1] > WINDOW_HEIGHT:
             self.ls.pop(0)
+            carObstacleImg = carListObstacle[random.randint(0, len(carListObstacle) - 1)] # random xe
+            obstacle_width = carObstacleImg.get_width()
+            obstacle_height = carObstacleImg.get_height()
             y = self.ls[3][1] - self.distance
             lane = random.randint(55, 300)
-            carObstacleImg = carListObstacle[random.randint(0, len(carListObstacle) - 1)] # random xe
-            self.ls.append([lane, y, carObstacleImg]) # thêm ảnh xe vào mảng
+            self.ls.append([lane, y, carObstacleImg, obstacle_width, obstacle_height]) 
 
 
 class Car():
-    def __init__(self, img): # Thêm img vào constructor
+    def __init__(self, img):
         self.width = CAR_WIDTH
         self.height = CAR_HEIGHT
-        self.img = img #
+        self.img = img 
         self.x = (WINDOW_WIDTH-self.width)/2
         self.y = (WINDOW_HEIGHT-self.height)/2
         self.speed = CAR_SPEED
@@ -187,10 +193,11 @@ def isGameOver(car, obstacles):
         #         LANE_WIDTH + (LANE_WIDTH-obstacles.width)/2)
         x = int(obstacles.ls[i][0])
         y = int(obstacles.ls[i][1])
-        obstaclesRect = [x, y, obstacles.width - 10, obstacles.height - 10]
+        obstaclesRect = [x, y, obstacles.ls[i][3] - 10, obstacles.ls[i][4] - 10]
         if rectCollision(carRect, obstaclesRect) == True:
             return True
     return False
+
 
 option = 0
 choosedCar1 = False
@@ -210,6 +217,7 @@ def chooseOpitons(bg):
 
     if option2.isClicked:
         option = 2
+
 
 idx1 = 0
 carPlayer1 = carListUserStart[0] # Biến chọn xe người chơi
@@ -363,9 +371,6 @@ def P1Movement(events):
     lock.acquire()
 
     for event in events:
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
         if event.type == KEYDOWN:
             if event.key == K_LEFT:
                 P1moveLeft = True
@@ -394,9 +399,6 @@ def P2Movement(events):
     lock.acquire()
 
     for event in events:
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
         if event.type == KEYDOWN:
             if event.key == K_a:
                 P2moveLeft = True
@@ -437,6 +439,11 @@ def gamePlay2P(bg, car1, car2, obstacles, score):
 
     while True:
         events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
         P1_thread = threading.Thread(target=P1Movement, args=(events,))
         P2_thread = threading.Thread(target=P2Movement, args=(events,))
         P1_thread.start()
@@ -481,6 +488,11 @@ def gamePlay1P(bg, car, obstacles, score):
 
     while True:
         events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
         P1_thread = threading.Thread(target=P1Movement, args=(events,))
         P1_thread.start()
         P1_thread.join()
@@ -539,6 +551,7 @@ def gameOver(bg, car, obstacles, score):
             return
 
         if backButton.isClicked:
+            time.sleep(0.3)
             option = 0
             sleep = False
             choosedCar1 = False

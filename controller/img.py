@@ -42,6 +42,10 @@ def SOUND_BUTTON():
     SOUND_BUTTON = pygame.transform.scale(SOUND_BUTTON, (60, 60))
     return SOUND_BUTTON
 
+def MUTE_BUTTON():
+    MUTE_BUTTON = pygame.image.load('./img/help/mute.jpg')
+    MUTE_BUTTON = pygame.transform.scale(MUTE_BUTTON, (60, 60))
+    return MUTE_BUTTON    
 
 def RETURN_BUTTON():
     RETURN_BUTTON = pygame.image.load('./img/help/close.png')

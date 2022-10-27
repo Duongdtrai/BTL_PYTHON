@@ -9,6 +9,7 @@ from pygame.locals import *
 # thư viện tự viết
 import controller.img as IMAGE
 import controller.button as button
+import controller.soundButton as sbutton
 import constants.obstacle as obstacle
 import constants.car as car
 import constants.window as window
@@ -38,12 +39,16 @@ OBSTACLES_SPEED = obstacle.obstacleSpeed
 CHANGE_SPEED = obstacle.changeSpeed
 BG_SPEED = obstacle.backgroundSpeed
 
+
 # list OBSTACLES
 carListObstacle = car.carListObstacle
+
 
 # list car user
 carListUser =  car.carListUser
 carListUserStart = car.carListUserStart
+
+
 # img
 BG_POSTER = IMAGE.POSTER() # Background trước ghi vào game
 BG_IMG = IMAGE.BACKGROUND()
@@ -60,11 +65,24 @@ FRAMES = IMAGE.FRAMES()  # khung chứa chọn các xe
 CHOOSE_CAR = IMAGE.CHOOSE_CAR()
 ONE_PLAYER = IMAGE.ONE_PLAYER()  # khung chứa chọn các xe
 TWO_PLAYER = IMAGE.TWO_PLAYER()
+
+
 # init app game
 pygame.init()
 DISPLAY_SURF = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('HORIZON CHASE Tunbo')
 fpsClock = pygame.time.Clock()
+
+
+# music
+pygame.mixer.music.load('./sounds/background.wav')
+pygame.mixer.music.play(-1)
+explosion_sound = pygame.mixer.Sound('./sounds/explosion.wav')
+
+
+# button
+soundButton = sbutton.soundButton(WINDOW_WIDTH - 60, 3, SOUND_BUTTON)
+
 
 class Background():
     def __init__(self, img):
@@ -195,6 +213,7 @@ def isGameOver(car, obstacles):
         y = int(obstacles.ls[i][1])
         obstaclesRect = [x, y, obstacles.ls[i][3] - 10, obstacles.ls[i][4] - 10]
         if rectCollision(carRect, obstaclesRect) == True:
+            explosion_sound.play()
             return True
     return False
 
@@ -260,6 +279,7 @@ def chooseCar1(bg):
         car = carListUserStart[idx1]
     return car
 
+
 idx2 = 0
 carPlayer2 = carListUserStart[0]
 def chooseCar2(bg):
@@ -301,6 +321,7 @@ def chooseCar2(bg):
         car = carListUserStart[idx2]
     return car
 
+
 playing = False
 sleep = False
 def gameStart(bg):
@@ -314,8 +335,7 @@ def gameStart(bg):
     commentSize = commentSuface.get_size()
 
     # playButton = button.Button(WINDOW_WIDTH/2 - 100, WINDOW_HEIGHT - 450, PLAY_BUTTON)
-    helpButton = button.Button(WINDOW_WIDTH - 60, 0, HELP_BUTTON)
-    soundButton = button.Button(WINDOW_WIDTH - 110, 3, SOUND_BUTTON)
+    helpButton = button.Button(WINDOW_WIDTH - 110, 0, HELP_BUTTON)
 
     returnButton = button.Button(20, 160, RETURN_BUTTON)
 
@@ -456,6 +476,7 @@ def gamePlay2P(bg, car1, car2, obstacles, score):
 
         bg.draw()
         bg.update()
+        soundButton.draw(DISPLAY_SURF)
         car1.draw()
         car1.update(P1moveLeft, P1moveRight, P1moveUp, P1moveDown)
         car2.draw()
@@ -502,6 +523,7 @@ def gamePlay1P(bg, car, obstacles, score):
 
         bg.draw()
         bg.update()
+        soundButton.draw(DISPLAY_SURF)
         car.draw()
         car.update(P1moveLeft, P1moveRight, P1moveUp, P1moveDown)
         obstacles.draw()
